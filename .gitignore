@@ -1,0 +1,29 @@
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+
+# Local History for Visual Studio Code
+.history/
+
+# Built Visual Studio Code Extensions
+*.vsix
+# Cahche files
+dags/__pycache__/
+
+# other files
+.env
+docker-compose.yaml
+dags/user_processing.py
+
+# airflow logs and plugins
+logs/
+plugins/
