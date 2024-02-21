@@ -1,6 +1,7 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 from datetime import datetime, timedelta
+import pendulum
 
 #executables
 import scripts.create_transaction as sct
@@ -8,9 +9,11 @@ import scripts.create_transaction as sct
 
 with DAG(dag_id="transaction_generator", 
          description="Transaction simulator. Creates a transactioin record in the DB.",
-         schedule_interval=None,
-         start_date=datetime(2024,2,20),
+         schedule_interval=timedelta(minutes=1),
+         start_date=pendulum.datetime(2024, 2, 20, tz='America/Chicago'),
+         end_date= pendulum.datetime(2024, 2, 21, 13, 25, tz='America/Chicago'),
          catchup=False,
+         max_active_runs=1,         
          default_args={
              "email": ["dervish-tankful-0f@icloud.com"],
              "email_on_failure": True,
