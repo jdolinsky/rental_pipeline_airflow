@@ -9,6 +9,7 @@ from datetime import datetime
 LOCATION = "us-central1"
 BUCKET = "rental_transactions"
 STORAGE_DOC = "new_transactions.csv"
+
 #executables
 def get_max_date_from_bq(ti):
    sql = "SELECT max(payment_date) FROM bi_department.transaction_table"
@@ -21,11 +22,13 @@ def get_max_date_from_bq(ti):
    date = datetime.utcfromtimestamp(unix_date).strftime('%Y-%m-%d %H:%M:%S')
    ti.xcom_push(key="date", value=date)
 
+# ------------ DAG --------------
+   
 with DAG(dag_id='sync_transactions_to_bq', 
-     catchup= False, 
-     schedule=None,
-     start_date=datetime(2024, 2, 1),
-     default_args={"owner":'JD'}):
+         catchup= False, 
+         schedule=None,
+         start_date=datetime(2024, 2, 1)
+         ) as dag:
    
    # Load the last transaction update date from BigQuery
    get_max_date_id = PythonOperator(task_id="get_max_date_bq",
@@ -51,6 +54,7 @@ with DAG(dag_id='sync_transactions_to_bq',
                                                        skip_leading_rows=1,
                                                        allow_quoted_newlines=True
                                                        )
+   # TODO - add storage cleanup 
    
 get_max_date_id >> new_transactions_to_gstorage >> transfer_from_storage_to_bq
 
