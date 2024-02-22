@@ -10,8 +10,8 @@ import scripts.create_transaction as sct
 with DAG(dag_id="transaction_generator", 
          description="Transaction simulator. Creates a transactioin record in the DB.",
          schedule_interval=timedelta(minutes=1),
-         start_date=pendulum.datetime(2024, 2, 20, tz='America/Chicago'),
-         end_date= pendulum.datetime(2024, 2, 21, 13, 25, tz='America/Chicago'),
+         start_date=pendulum.datetime(2024, 2, 21, tz='America/Chicago'),
+         end_date= pendulum.datetime(2024, 2, 22, 13, 30, tz='America/Chicago'),
          catchup=False,
          max_active_runs=1,         
          default_args={

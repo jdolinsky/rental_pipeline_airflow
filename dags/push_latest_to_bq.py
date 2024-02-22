@@ -2,8 +2,11 @@ from airflow import DAG
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
 from airflow.providers.google.cloud.transfers.postgres_to_gcs import PostgresToGCSOperator
 from airflow.providers.google.cloud.transfers.gcs_to_bigquery import GCSToBigQueryOperator
+from airflow.providers.google.cloud.operators.gcs import GCSDeleteObjectsOperator
 from airflow.operators.python import PythonOperator
 from datetime import datetime
+
+import textwrap
 
 # GCP stuff
 LOCATION = "us-central1"
@@ -22,13 +25,15 @@ def get_max_date_from_bq(ti):
    date = datetime.utcfromtimestamp(unix_date).strftime('%Y-%m-%d %H:%M:%S')
    ti.xcom_push(key="date", value=date)
 
-# ------------ DAG --------------
+# [START instantiate_dag]
    
 with DAG(dag_id='sync_transactions_to_bq', 
          catchup= False, 
          schedule=None,
          start_date=datetime(2024, 2, 1)
          ) as dag:
+
+# [END instantiate_dag]
    
    # Load the last transaction update date from BigQuery
    get_max_date_id = PythonOperator(task_id="get_max_date_bq",
@@ -54,7 +59,19 @@ with DAG(dag_id='sync_transactions_to_bq',
                                                        skip_leading_rows=1,
                                                        allow_quoted_newlines=True
                                                        )
-   # TODO - add storage cleanup 
+   delete_file = GCSDeleteObjectsOperator(task_id="delete_file_gs", 
+                                          gcp_conn_id='gcp_dvd_bi',
+                                          bucket_name=BUCKET,
+                                          objects=[STORAGE_DOC])
    
-get_max_date_id >> new_transactions_to_gstorage >> transfer_from_storage_to_bq
+   # [START documentation]
+   delete_file.doc_md = textwrap.dedent(
+      """\
+   #### Task Documentation
+   Delete the temporary file from the bucket used to transfer transaction
+   data from Postgres to GCP 
+   """
+   )
+   
+get_max_date_id >> new_transactions_to_gstorage >> transfer_from_storage_to_bq >> delete_file
 
