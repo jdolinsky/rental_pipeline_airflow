@@ -1,9 +1,10 @@
-
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from datetime import datetime, timedelta
 from airflow.providers.postgres.hooks.postgres import PostgresHook
+
+CSV_LOCATION = '/tmp/data.csv'
 
 def load_exisiting_users(ti):
     hook = PostgresHook(postgres_conn_id="postgres_dvd_rental")
@@ -14,10 +15,10 @@ def load_exisiting_users(ti):
         FROM payment AS p
         JOIN rental AS r on p.rental_id = r.rental_id       
         """)
-    df.to_csv('/tmp/data.csv', index=None)
+    df.to_csv(CSV_LOCATION, index=None)
 
 def create_transaction():
-    df = pd.read_csv("/tmp/data.csv")
+    df = pd.read_csv(CSV_LOCATION)
     df['payment_date'] = pd.to_datetime(df['payment_date'])
     df['payment_date'] = df['payment_date'].dt.strftime('%Y-%m-%d %H:%M:%S')
     
@@ -48,7 +49,9 @@ def create_transaction():
     payment_row['payment_date'] = payment_date.strftime('%Y-%m-%d %H:%M:%S')
 
     # rental date
-    rental_date = payment_date - timedelta(days=1)
+    # generate rental duration in days between 1 and 10 days
+    rental_days = np.random.randint(1, 11) 
+    rental_date = payment_date - timedelta(days=rental_days)
     rental_row['rental_date'] = rental_date.strftime('%Y-%m-%d %H:%M:%S')
 
     # return date
