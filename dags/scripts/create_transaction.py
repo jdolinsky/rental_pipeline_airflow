@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import time
 
 from datetime import datetime, timedelta
 from airflow.providers.postgres.hooks.postgres import PostgresHook
@@ -18,6 +19,8 @@ def load_exisiting_users(ti):
     df.to_csv(CSV_LOCATION, index=None)
 
 def create_transaction():
+    print("_____________________ seed _____________ ", int(time.time()))
+    np.random.seed(int(time.time()))
     df = pd.read_csv(CSV_LOCATION)
     df['payment_date'] = pd.to_datetime(df['payment_date'])
     df['payment_date'] = df['payment_date'].dt.strftime('%Y-%m-%d %H:%M:%S')
