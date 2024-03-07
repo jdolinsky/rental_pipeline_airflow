@@ -2,7 +2,7 @@
      alt="Markdown Monster icon"
      style="margin: 0px;" />
 
-# Airflow pipeline for a Movie Rental Analytics
+# Airflow Pipeline for Movie Rental Analytics
 
 In this project, inspired by the Bar Dadon's [tutorial](https://towardsdev.com/data-engineering-project-bi-department-part-1-cb6086da3662), I used a PostgreSQL sample [database](https://www.postgresqltutorial.com/postgresql-getting-started/postgresql-sample-database/) to emulate a DVD Rental Business. The ERD for the database is shown below.
 
