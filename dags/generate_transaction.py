@@ -6,22 +6,25 @@ import pendulum
 #executables
 import scripts.create_transaction as sct
 
-
+# [START instantiate_dag]
 with DAG(dag_id="transaction_generator", 
          description="Transaction simulator. Creates a transactioin record in the DB.",
-         schedule_interval=timedelta(minutes=1),
+         schedule_interval=timedelta(minutes=2),
+         # pendulum is used to create an "aware" datetime objects 
          start_date=pendulum.datetime(2024, 2, 21, tz='America/Chicago'),
-         end_date= pendulum.datetime(2024, 2, 28, 10, 52, tz='America/Chicago'),
+         end_date= pendulum.datetime(2024, 3, 4, 10, 10, tz='America/Chicago'),
          catchup=False,
-         max_active_runs=1,         
+         max_active_runs=2,         
          default_args={
              "email": ["dervish-tankful-0f@icloud.com"],
              "email_on_failure": True,
              "retries": 1,
-             "retry_delay": timedelta(minutes=3),
+             "retry_delay": timedelta(minutes=5),
              "owner": "JD"
              }
          ) as dag:
+
+# [END instantiate_dag]    
     
     create_transaction = PythonOperator(
         task_id="create_transaction",

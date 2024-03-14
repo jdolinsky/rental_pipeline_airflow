@@ -7,6 +7,7 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 
 CSV_LOCATION = '/tmp/data.csv'
 
+
 def load_exisiting_users(ti):
     hook = PostgresHook(postgres_conn_id="postgres_dvd_rental")
     df = hook.get_pandas_df(sql="""
@@ -19,7 +20,8 @@ def load_exisiting_users(ti):
     df.to_csv(CSV_LOCATION, index=None)
 
 def create_transaction():
-    print("_____________________ seed _____________ ", int(time.time()))
+    # everytime a DAG runs we need to generate a new seed so that the data does not repeat.
+    # Here I used unix time.
     np.random.seed(int(time.time()))
     df = pd.read_csv(CSV_LOCATION)
     df['payment_date'] = pd.to_datetime(df['payment_date'])

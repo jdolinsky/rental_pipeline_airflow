@@ -49,6 +49,7 @@ with DAG(dag_id='sync_transactions_to_bq',
                                                         use_server_side_cursor=False,
                                                         sql = './latest_transactions.sql'                                                        
                                                         )
+   # Append the latest data from the CSV file on Cloud Storage to BigQuery warehouse
    transfer_from_storage_to_bq = GCSToBigQueryOperator(task_id="from_gcs_to-bq", 
                                                        bucket=BUCKET, 
                                                        gcp_conn_id = 'gcp_dvd_bi',
@@ -59,6 +60,7 @@ with DAG(dag_id='sync_transactions_to_bq',
                                                        skip_leading_rows=1,
                                                        allow_quoted_newlines=True
                                                        )
+   # Clean up the storage
    delete_file = GCSDeleteObjectsOperator(task_id="delete_file_gs", 
                                           gcp_conn_id='gcp_dvd_bi',
                                           bucket_name=BUCKET,
