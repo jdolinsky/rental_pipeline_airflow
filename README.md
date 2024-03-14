@@ -106,3 +106,7 @@ I used Looker Studio to create a [simple dashboard](https://lookerstudio.google.
 The most popular movie title worldwide is "Wale Bikini". It's mostly popular in United States followed by China. 
 
 The most profitable category is Comedy. The most profitable movie ratings are PG-13 and PG. 
+
+## Technologies
+
+Python, SQL, BigQuery, Cloud Storage, Looker Studio, Airflow, pandas, PostgreSQL, Docker
