@@ -27,3 +27,4 @@ dags/user_processing.py
 # airflow logs and plugins
 logs/
 plugins/
+.vscode/settings.json
