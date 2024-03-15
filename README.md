@@ -12,7 +12,7 @@ In this project, I used a PostgreSQL sample [database](https://www.postgresqltut
 
 The business owners would like to get some insight on which movie titles, categories, and ratings are bringing in the most revenue, and have this data broken-down geographically.   
 
-There are two DAG files that I created for this project. First DAG - [generate_transations.py](dags/generate_transaction.py) is used to emulate real-world transactions. The second DAG [push_latest_to_bq.py](dags/push_latest_to_bq.py) is for loading historic transaction data from PostgreSQL into BigQuery Warehouse/Data Mart for data analytics. The last part of the project is a simple [Dashboard](https://lookerstudio.google.com/reporting/8d7374ba-2cc5-4ecb-a890-313dccc8734f) created in Looker Studio using the data from BigQuery. 
+There are two DAG files that I created for this project. First DAG - [generate_transaction.py](dags/generate_transaction.py) is used to emulate real-world transactions. The second DAG [push_latest_to_bq.py](dags/push_latest_to_bq.py) is for loading historic transaction data from PostgreSQL into BigQuery Warehouse/Data Mart for data analytics. The last part of the project is a simple [Dashboard](https://lookerstudio.google.com/reporting/8d7374ba-2cc5-4ecb-a890-313dccc8734f) created in Looker Studio using the data from BigQuery. 
 
 ## Part I - Transaction Generator
 
